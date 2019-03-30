@@ -1,0 +1,514 @@
+openapi: 3.0.1
+info:
+  title: Family Management
+  description: 'Api exposed by family management service'
+  version: 0.0.1
+externalDocs:
+  description: Go to source Code
+  url: https://bitbucket.org/konradboniecki/family-management/src/master/
+servers:
+  - url: http://localhost:8080/api/family-mgt/v1
+  - url: https://konradboniecki.com.pl/api/family-mgt/v1
+tags:
+  - name: Family Management
+    description: Api for managing families.
+  - name: Family Invitations
+    description: Api for managing family invitations
+security:
+  - basicAuth: [ ]
+paths:
+  '/families':
+    post:
+      tags:
+        - Family Management
+      summary: Create new family.
+      operationId: createFamily
+      requestBody:
+        description: Properties for family creation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FamilyCreation'
+        required: true
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedFamily'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/families/owners/{ownerId}':
+    get:
+      tags:
+        - Family Management
+      summary: Find family.
+      operationId: findFamilyByOwner
+      parameters:
+        - $ref: '#/components/parameters/OwnerId'
+      responses:
+        '200':
+          description: Family found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/families/{familyId}':
+    delete:
+      tags:
+        - Family Management
+      summary: Delete family.
+      operationId: deleteFamily
+      parameters:
+        - $ref: '#/components/parameters/FamilyId'
+      responses:
+        '204':
+          description: Family deleted.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - Family Management
+      summary: Modify family.
+      operationId: modifyFamily
+      parameters:
+        - $ref: '#/components/parameters/FamilyId'
+      requestBody:
+        description: Properties for family modification.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FamilyModification'
+        required: true
+      responses:
+        '200':
+          description: Family modified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Family Management
+      summary: Find family.
+      operationId: findFamily
+      parameters:
+        - $ref: '#/components/parameters/FamilyId'
+      responses:
+        '200':
+          description: Family found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/invitations':
+    post:
+      tags:
+        - Family Invitations
+      summary: Create new family invitation.
+      operationId: createInvitation
+      requestBody:
+        description: Properties for invitation to family
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitationCreation'
+        required: true
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedInvitation'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Family Invitations
+      summary: Find invitations
+      operationId: findInvitations
+      parameters:
+        - $ref: '#/components/parameters/FamilyIdParam'
+        - $ref: '#/components/parameters/Email'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Operation is successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationPage'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/invitations/{invitationId}':
+    delete:
+      tags:
+        - Family Invitations
+      summary: Delete invitation.
+      operationId: deleteInvitation
+      parameters:
+        - $ref: '#/components/parameters/InvitationId'
+      responses:
+        '204':
+          description: Invitation deleted.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Family Invitations
+      summary: Find invitation.
+      operationId: findInvitation
+      parameters:
+        - $ref: '#/components/parameters/InvitationId'
+      responses:
+        '200':
+          description: Invitation found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    FamilyCreation:
+      type: object
+      required:
+        - familyId
+        - ownerId
+      properties:
+        budgetId:
+          type: string
+          maxLength: 36
+          example: "465838ce-bc88-4c98-a3e8-ce3ef1559572"
+        ownerId:
+          type: string
+          maxLength: 36
+          example: "465838ce-bc88-4c98-a3e8-ce3ef1559572"
+        title:
+          type: string
+          maxLength: 64
+          example: "family of testers"
+    CreatedFamily:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/FamilyProperties'
+    FamilyModification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/FamilyProperties'
+    Family:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/FamilyProperties'
+    FamilyProperties:
+      type: object
+      required:
+        - id
+        - ownerId
+        - title
+      properties:
+        id:
+          type: string
+          maxLength: 36
+          example: "dc1fd96a-2532-4a81-afbe-7f7b2245331e"
+        ownerId:
+          type: string
+          maxLength: 36
+          example: "dc1fd96a-2532-4a81-afbe-7f7b2245331e"
+        budgetId:
+          type: string
+          maxLength: 36
+          example: "465838ce-bc88-4c98-a3e8-ce3ef1559572"
+        title:
+          type: string
+          minimum: 6
+          maximum: 64
+          example: "465838ce-bc88-4c98-a3e8-ce3ef1559572"
+    InvitationCreation:
+      type: object
+      properties:
+        familyId:
+          type: string
+          maxLength: 36
+          example: "13be890d-6021-4747-a081-3595e9827b5a"
+        registered:
+          type: boolean
+          description: "true/false falg if invitation is for registered account"
+          example: true
+        email:
+          type: string
+          format: email
+          maxLength: 256
+          example: "test@mail.com"
+        invitationCode:
+          type: string
+          maxLength: 36
+          example: "13be890d-6021-4747-a081-3595e9827b5a"
+    CreatedInvitation:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/InvitationProperties'
+    Invitation:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/InvitationProperties'
+    InvitationProperties:
+      type: object
+      required:
+        - id
+        - familyId
+        - email
+        - invitationCode
+      properties:
+        id:
+          type: string
+          maxLength: 36
+          example: "395aeb4d-65e4-429a-8786-617963b585af"
+        familyId:
+          type: string
+          maxLength: 36
+          example: "13be890d-6021-4747-a081-3595e9827b5a"
+        registered:
+          type: boolean
+          description: "true/false falg if invitation is for registered account"
+          example: true
+        email:
+          type: string
+          format: email
+          maxLength: 256
+          example: "test@mail.com"
+        invitationCode:
+          type: string
+          maxLength: 36
+          example: "13be890d-6021-4747-a081-3595e9827b5a"
+        created:
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+    InvitationPage:
+      type: object
+      title: InvitationPage
+      description: A page of expenses.
+      properties:
+        items:
+          type: array
+          description: Expense item
+          items:
+            $ref: '#/components/schemas/Invitation'
+        _meta:
+          $ref: '#/components/schemas/PaginationMetadata'
+    PaginationMetadata:
+      title: PaginationMetadata
+      description: lList of metadata associated to the collection
+      type: object
+      properties:
+        elements:
+          description: Number of elements on page.
+          type: integer
+          format: int32
+          readOnly: true
+        pageSize:
+          description: Maximum amount of items on page.
+          type: integer
+          format: int32
+          readOnly: true
+        page:
+          description: Number of page. First page is 0.
+          type: integer
+          format: int32
+          readOnly: true
+        totalPages:
+          description: Total amount of pages.
+          type: integer
+          format: int32
+          readOnly: true
+        totalElements:
+          description: Total amount of pages.
+          type: integer
+          format: int32
+          readOnly: true
+    ErrorDescription:
+      title: ErrorDescription
+      description: |
+        [RFC 7807](https://tools.ietf.org/html/rfc7807) Problem Details for HTTP
+      type: object
+      required:
+        - status
+        - title
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: |
+            The HTTTP response status code
+        title:
+          type: string
+          format: int32
+          description: |
+            Summary of problem type
+          maxLength: 4096
+        type:
+          type: string
+          description: |
+            An URI reference [RFC3986] that identifies the problem type.
+          maxLength: 4096
+        detail:
+          type: string
+          description: |
+            Explanation specific to this occurence of the problem.
+          maxLength: 4096
+        instance:
+          type: string
+          description: |
+            An URI reference that identifies the specific ocurrence of the problem.
+          maxLength: 4096
+  responses:
+    ResourceNotFoundError:
+      description: |
+        Resource or subresource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDescription'
+          examples:
+            response:
+              value:
+                status: 404
+                title: Resource not found
+                type: ResourceNotFound
+                details: Resource of subresource not found.
+    BadRequestError:
+      description: |
+        The server cannot or will not process the request due to an apparent client error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDescription'
+          examples:
+            response:
+              value:
+                status: 400
+                title: Bad Request
+                type: InvalidRequest
+                details: Invalid request.
+    InternalServerError:
+      description: |
+        Server encountered an unexpected condition that prevented it from fulfilling the request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDescription'
+          examples:
+            response:
+              value:
+                status: 500
+                title: Internal Server Error
+                type: UnexpectedError
+                details: Unexpected error occurred.
+  parameters:
+    FamilyId:
+      name: familyId
+      in: path
+      description: Unique identifier of a family in form of UUID.
+      required: true
+      schema:
+        type: string
+        maxLength: 36
+    FamilyIdParam:
+      name: familyId
+      in: query
+      description: Unique identifier of a family in form of UUID.
+      required: false
+      schema:
+        type: string
+        maxLength: 36
+    OwnerId:
+      name: ownerId
+      in: path
+      description: Unique identifier of a owner id in form of UUID.
+      required: true
+      schema:
+        type: string
+        maxLength: 36
+    InvitationId:
+      name: invitationId
+      in: path
+      description: Unique identifier of invitation id in form of UUID.
+      required: true
+      schema:
+        type: string
+        maxLength: 36
+    Email:
+      name: email
+      in: query
+      required: false
+      schema:
+        type: string
+        format: email
+        example: email@email.com
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 100
+      description: "The limit parameter controls the maximum number of items that may be returned for a single request. Default value is 100."
+    Page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+      description: "The page parameter controls the starting page. Default value is 0 and first element is also 0."
