@@ -27,7 +27,7 @@ public class FamilyService {
         if (family.isPresent()) {
             return familyMapper.toOASFamily(family.get());
         } else {
-            throw new FamilyNotFoundException("Family with id: " + id + " not found");
+            throw new FamilyNotFoundException(String.format("Family with id: %s not found", id));
         }
     }
 
@@ -44,7 +44,7 @@ public class FamilyService {
         if (existsById(id)) {
             familyRepository.deleteById(id);
         } else {
-            throw new FamilyNotFoundException("Family with id: " + id + " not found");
+            throw new FamilyNotFoundException(String.format("Family with id: %s not found", id));
         }
     }
 

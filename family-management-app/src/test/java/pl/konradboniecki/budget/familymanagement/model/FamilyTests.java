@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class FamilyTests {
+class FamilyTests {
 
     @Test
-    public void givenNullProperties_whenMergeFamilies_thenDontCopyNulls() {
+    void givenNullProperties_whenMergeFamilies_thenDontCopyNulls() {
         // Given:
         String familyId = UUID.randomUUID().toString();
         String budgetId = UUID.randomUUID().toString();
@@ -39,7 +39,7 @@ public class FamilyTests {
     }
 
     @Test
-    public void givenValidProperties_whenMergeFamilies_thenOverrideProperties() {
+    void givenValidProperties_whenMergeFamilies_thenOverrideProperties() {
         // Given:
         String familyId1 = UUID.randomUUID().toString();
         String familyId2 = UUID.randomUUID().toString();

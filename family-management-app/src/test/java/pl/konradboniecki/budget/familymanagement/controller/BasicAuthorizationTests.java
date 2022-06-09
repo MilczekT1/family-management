@@ -23,7 +23,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         classes = Application.class,
         webEnvironment = RANDOM_PORT
 )
-public class BasicAuthorizationTests {
+class BasicAuthorizationTests {
     @Autowired
     private TestRestTemplate rest;
 
@@ -32,13 +32,13 @@ public class BasicAuthorizationTests {
     private String baseUrl;
 
     @BeforeAll
-    public void beforeAll() {
+    void beforeAll() {
         baseUrl = "http://localhost:" + port;
         assertThat(rest.getForEntity(baseUrl + "/actuator/health", String.class).getStatusCodeValue()).isEqualTo(200);
     }
 
     @Test
-    public void return401FromFamilyControllerWhenBAHeaderIsMissing() {
+    void return401FromFamilyControllerWhenBAHeaderIsMissing() {
         // Given:
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity httpEntity = new HttpEntity(httpHeaders);
@@ -59,7 +59,7 @@ public class BasicAuthorizationTests {
     }
 
     @Test
-    public void return401FromInvitationControllerWhenBAHeaderIsMissing() {
+    void return401FromInvitationControllerWhenBAHeaderIsMissing() {
         // Given:
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity httpEntity = new HttpEntity(httpHeaders);

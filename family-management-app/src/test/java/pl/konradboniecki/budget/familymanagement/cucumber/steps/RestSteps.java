@@ -30,7 +30,7 @@ public class RestSteps {
     public void invitationsAreFound(int numberOfInvitations) {
         responseStatusCodeEquals(HttpStatus.OK);
         OASInvitationPage invitationPage = (OASInvitationPage) sharedData.getLastResponseEntity().getBody();
-        Assertions.assertThat(invitationPage.getItems().size()).isEqualTo(numberOfInvitations);
+        Assertions.assertThat(invitationPage.getItems()).hasSize(numberOfInvitations);
         Assertions.assertThat(invitationPage.getMeta().getTotalElements()).isEqualTo(numberOfInvitations);
 
     }

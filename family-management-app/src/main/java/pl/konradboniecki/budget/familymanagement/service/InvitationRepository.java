@@ -10,14 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface InvitationRepository extends MongoRepository<Invitation, String> {
-    /**
-     * /api/family-mgt/v1/invitations?email=XX&familyId=YY
-     *
-     * @param email
-     * @param familyId
-     */
-    @Deprecated(forRemoval = true)
-    Optional<Invitation> findByEmailAndFamilyId(String email, String familyId);
 
     /**
      * /api/family-mgt/v1/invitations/{invitationId}

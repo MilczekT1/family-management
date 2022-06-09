@@ -12,8 +12,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import pl.konradboniecki.budget.familymanagement.controller.FamilyController;
-import pl.konradboniecki.budget.familymanagement.controller.InvitationController;
 import pl.konradboniecki.budget.familymanagement.cucumber.commons.SharedData;
 import pl.konradboniecki.budget.familymanagement.cucumber.security.Security;
 import pl.konradboniecki.budget.familymanagement.model.Family;
@@ -35,6 +33,8 @@ public class FamilySteps {
     private final TestRestTemplate testRestTemplate;
     private final SharedData sharedData;
 
+    private final String BASE_PATH = "/api/family-mgt/v1";
+
     @After
     public void scenarioCleanup() {
         security.basicAuthentication();
@@ -52,7 +52,7 @@ public class FamilySteps {
         log.info("SCENARIO CLEANUP: Deleting family with id: {}", familyId);
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<Void> responseEntity =
-                testRestTemplate.exchange(FamilyController.BASE_PATH + "/families/{familyId}",
+                testRestTemplate.exchange(BASE_PATH + "/families/{familyId}",
                         HttpMethod.DELETE, entity, Void.class, familyId);
         log.info("SCENARIO CLEANUP: result {}", responseEntity.getStatusCodeValue());
         assertThat(responseEntity.getStatusCode())
@@ -63,7 +63,7 @@ public class FamilySteps {
         log.info("SCENARIO CLEANUP: Deleting invitation with id: {}", invitationId);
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<Void> responseEntity =
-                testRestTemplate.exchange(InvitationController.BASE_PATH + "/invitations/{invitationId}",
+                testRestTemplate.exchange(BASE_PATH + "/invitations/{invitationId}",
                         HttpMethod.DELETE, entity, Void.class, invitationId);
         log.info("SCENARIO CLEANUP: result {}", responseEntity.getStatusCodeValue());
         assertThat(responseEntity.getStatusCode())
@@ -75,7 +75,7 @@ public class FamilySteps {
         String ownerId = SharedData.getUserIdForName(userName);
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<?> responseEntity = testRestTemplate
-                .exchange(FamilyController.BASE_PATH + "/families/owners/" + ownerId, HttpMethod.GET, entity, OASFamily.class);
+                .exchange(BASE_PATH + "/families/owners/" + ownerId, HttpMethod.GET, entity, OASFamily.class);
         sharedData.setLastResponseEntity(responseEntity);
         responseStatusCodeEquals(HttpStatus.NOT_FOUND);
     }
@@ -86,7 +86,7 @@ public class FamilySteps {
         OASFamily familyToSave = families.get(0);
         HttpEntity<?> entity = new HttpEntity<>(familyToSave, security.getSecurityHeaders());
         ResponseEntity<Family> responseEntity = testRestTemplate
-                .exchange(FamilyController.BASE_PATH + "/families", HttpMethod.POST, entity, Family.class);
+                .exchange(BASE_PATH + "/families", HttpMethod.POST, entity, Family.class);
         sharedData.setLastResponseEntity(responseEntity);
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
@@ -104,7 +104,7 @@ public class FamilySteps {
 
         HttpEntity<?> entity = new HttpEntity<>(familyToSave, security.getSecurityHeaders());
         ResponseEntity<OASFamily> responseEntity = testRestTemplate
-                .exchange(FamilyController.BASE_PATH + "/families", HttpMethod.POST, entity, OASFamily.class);
+                .exchange(BASE_PATH + "/families", HttpMethod.POST, entity, OASFamily.class);
         sharedData.setLastResponseEntity(responseEntity);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
@@ -175,7 +175,7 @@ public class FamilySteps {
         }
         HttpEntity<OASFamily> entity = new HttpEntity<>(updatePayload, security.getSecurityHeaders());
         ResponseEntity<OASFamily> responseEntity = testRestTemplate
-                .exchange(FamilyController.BASE_PATH + "/families/{familyId}", HttpMethod.PUT, entity, OASFamily.class, familyId);
+                .exchange(BASE_PATH + "/families/{familyId}", HttpMethod.PUT, entity, OASFamily.class, familyId);
         sharedData.setLastResponseEntity(responseEntity);
     }
 
@@ -195,21 +195,21 @@ public class FamilySteps {
     private void deleteFamily(String familyId) {
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<OASFamily> responseEntity = testRestTemplate
-                .exchange(FamilyController.BASE_PATH + "/families/{familyId}", HttpMethod.DELETE, entity, OASFamily.class, familyId);
+                .exchange(BASE_PATH + "/families/{familyId}", HttpMethod.DELETE, entity, OASFamily.class, familyId);
         sharedData.setLastResponseEntity(responseEntity);
     }
 
     private void getFamilyById(String familyId) {
         HttpEntity<OASFamily> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<OASFamily> responseEntity = testRestTemplate
-                .exchange(FamilyController.BASE_PATH + "/families/{familyId}", HttpMethod.GET, entity, OASFamily.class, familyId);
+                .exchange(BASE_PATH + "/families/{familyId}", HttpMethod.GET, entity, OASFamily.class, familyId);
         sharedData.setLastResponseEntity(responseEntity);
     }
 
     private void getFamilyByOwnerId(String ownerId) {
         HttpEntity<OASFamily> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<OASFamily> responseEntity = testRestTemplate
-                .exchange(FamilyController.BASE_PATH + "/families/owners/{ownerId}", HttpMethod.GET, entity, OASFamily.class, ownerId);
+                .exchange(BASE_PATH + "/families/owners/{ownerId}", HttpMethod.GET, entity, OASFamily.class, ownerId);
         sharedData.setLastResponseEntity(responseEntity);
     }
 

@@ -207,8 +207,8 @@ public class MvcClientBase {
         when(invitationRepository.findAllByEmailAndFamilyId(emailWithInvitations, idOfFoundFamily, defaultPageable))
                 .thenReturn(pageWithinvitations);
         when(invitationRepository.findAllByEmailAndFamilyId(
-                eq("email@without-invitations.com"),
-                eq(idOfMissingFamily), eq(defaultPageable)))
+                "email@without-invitations.com",
+                idOfMissingFamily, defaultPageable))
                 .thenReturn(emptyPage);
 
         String idOfMissingInvitation = "801bcae9-348a-4cd3-9793-7e6234461d5f";

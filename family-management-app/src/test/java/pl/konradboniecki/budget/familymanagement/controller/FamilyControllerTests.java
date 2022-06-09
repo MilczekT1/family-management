@@ -30,7 +30,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         classes = Application.class,
         webEnvironment = RANDOM_PORT
 )
-public class FamilyControllerTests {
+class FamilyControllerTests {
 
     @Autowired
     private TestRestTemplate rest;
@@ -42,14 +42,14 @@ public class FamilyControllerTests {
     private String baseUrl;
 
     @BeforeAll
-    public void beforeAll(){
+    void beforeAll() {
         baseUrl = "http://localhost:" + port;
         assertThat(rest.getForEntity(baseUrl + "/actuator/health", String.class).getStatusCodeValue()).isEqualTo(200);
         rest = rest.withBasicAuth("testUserName", "testUserPassword");
     }
 
     @Test
-    public void givenMissingFamily_whenFindByOwner_thenReturnNotFound() {
+    void givenMissingFamily_whenFindByOwner_thenReturnNotFound() {
         // Given:
         String ownerId = UUID.randomUUID().toString();
         when(familyRepository.findByOwnerId(ownerId))

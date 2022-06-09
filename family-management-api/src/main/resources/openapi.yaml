@@ -17,7 +17,7 @@ tags:
 security:
   - basicAuth: [ ]
 paths:
-  '/families':
+  '/api/family-mgt/v1/families':
     post:
       tags:
         - Family Management
@@ -41,7 +41,7 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/families/owners/{ownerId}':
+  '/api/family-mgt/v1/families/owners/{ownerId}':
     get:
       tags:
         - Family Management
@@ -62,7 +62,7 @@ paths:
           $ref: '#/components/responses/ResourceNotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/families/{familyId}':
+  '/api/family-mgt/v1/families/{familyId}':
     delete:
       tags:
         - Family Management
@@ -126,7 +126,7 @@ paths:
           $ref: '#/components/responses/ResourceNotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/invitations':
+  '/api/family-mgt/v1/invitations':
     post:
       tags:
         - Family Invitations
@@ -171,7 +171,7 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/invitations/{invitationId}':
+  '/api/family-mgt/v1/invitations/{invitationId}':
     delete:
       tags:
         - Family Invitations

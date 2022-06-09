@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         properties = "spring.cloud.config.enabled=false"
 )
 @AutoConfigureMockMvc
-public class InvitationControllerTests {
+class InvitationControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,14 +60,14 @@ public class InvitationControllerTests {
     private Pageable defaultPageable = PageRequest.of(0, 100);
 
     @BeforeAll
-    public void setUp() {
+    void setUp() {
         basicAuthHeaderValue = chassisSecurityBasicAuthHelper.getBasicAuthHeaderValue();
     }
 
     // GET /api/family-mgt/v1/invitations
 
     @Test
-    public void when_invitation_is_found_by_id_then_response_status_and_headers_are_correct() throws Exception {
+    void when_invitation_is_found_by_id_then_response_status_and_headers_are_correct() throws Exception {
         // Given:
         String idOfInvitation = UUID.randomUUID().toString();
         Invitation invitation = new Invitation()
@@ -76,7 +76,7 @@ public class InvitationControllerTests {
                 .thenReturn(Optional.of(invitation));
         // Then:
         mockMvc.perform(get("/api/family-mgt/v1/invitations/{id}", idOfInvitation)
-                .header("Authorization", basicAuthHeaderValue))
+                        .header("Authorization", basicAuthHeaderValue))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON.toString()));
@@ -85,7 +85,7 @@ public class InvitationControllerTests {
     // GET /api/family-mgt/v1/invitations
 
     @Test
-    public void when_invitations_are_found_by_email_then_response_status_and_headers_are_correct() throws Exception {
+    void when_invitations_are_found_by_email_then_response_status_and_headers_are_correct() throws Exception {
         // Given:
         String idOfInvitation1 = UUID.randomUUID().toString();
         String idOfInvitation2 = UUID.randomUUID().toString();
@@ -103,7 +103,7 @@ public class InvitationControllerTests {
                 .thenReturn(pageWithInvitations);
         // Then:
         mockMvc.perform(
-                get(InvitationController.BASE_PATH + "/invitations?email=test1@mail.com")
+                        get("/api/family-mgt/v1/invitations?email=test1@mail.com")
                         .header("Authorization", basicAuthHeaderValue))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -111,7 +111,7 @@ public class InvitationControllerTests {
     }
 
     @Test
-    public void when_invitations_are_found_by_familyId_then_response_status_and_headers_are_correct() throws Exception {
+    void when_invitations_are_found_by_familyId_then_response_status_and_headers_are_correct() throws Exception {
         // Given:
         String idOfInvitation1 = UUID.randomUUID().toString();
         String idOfInvitation2 = UUID.randomUUID().toString();
@@ -140,7 +140,7 @@ public class InvitationControllerTests {
     }
 
     @Test
-    public void when_invitations_are_found_by_email_and_familyId_then_response_status_and_headers_are_correct() throws Exception {
+    void when_invitations_are_found_by_email_and_familyId_then_response_status_and_headers_are_correct() throws Exception {
         // Given:
         String idOfFamily = UUID.randomUUID().toString();
         String email = "test@mail.com";
@@ -154,7 +154,7 @@ public class InvitationControllerTests {
                 .thenReturn(pageWithInvitations);
         // Then:
         mockMvc.perform(
-                get(InvitationController.BASE_PATH + "/invitations?email={email}&familyId={familyId}", email, idOfFamily)
+                        get("/api/family-mgt/v1/invitations?email={email}&familyId={familyId}", email, idOfFamily)
                         .header("Authorization", basicAuthHeaderValue))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -164,7 +164,7 @@ public class InvitationControllerTests {
     // POST /api/family-mgt/v1/invitations
 
     @Test
-    public void when_invitation_is_saved_then_response_status_and_headers_are_correct() throws Exception {
+    void when_invitation_is_saved_then_response_status_and_headers_are_correct() throws Exception {
         // Given:
         String idOfInvitation = UUID.randomUUID().toString();
         String familyId = UUID.randomUUID().toString();
@@ -196,16 +196,16 @@ public class InvitationControllerTests {
     // DELETE /api/family-mgt/v1/invitations/{invitationId}
 
     @Test
-    public void when_invitation_is_removed_then_response_status_and_headers_are_correct() throws Exception {
+    void when_invitation_is_removed_then_response_status_and_headers_are_correct() throws Exception {
         // Given:
         String idOfMissingInvitation = UUID.randomUUID().toString();
         when(invitationRepository.existsById(idOfMissingInvitation)).thenReturn(true);
         doNothing().when(invitationRepository).deleteById(idOfMissingInvitation);
         // Then:
         mockMvc.perform(
-                delete("/api/family-mgt/v1/invitations/{id}", idOfMissingInvitation)
-                        .header("Authorization", basicAuthHeaderValue)
-                        .accept(MediaType.APPLICATION_JSON))
+                        delete("/api/family-mgt/v1/invitations/{id}", idOfMissingInvitation)
+                                .header("Authorization", basicAuthHeaderValue)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 }

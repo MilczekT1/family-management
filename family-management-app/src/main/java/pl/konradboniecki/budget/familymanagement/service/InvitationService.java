@@ -83,13 +83,9 @@ public class InvitationService {
     }
 
     private boolean containsEmailAndFamilyId(Map<String, String> params) {
-        if (params.size() == 2 &&
-                params.containsKey("familyId") &&
-                params.containsKey("email")) {
-            return true;
-        } else {
-            return false;
-        }
+        return params.size() == 2 &&
+                params.containsKey(PARAM_FAMILY_ID_KEY) &&
+                params.containsKey(PARAM_EMAIL_KEY);
     }
 
     public Page<Invitation> findAllByEmail(String email, Pageable pageable) {
