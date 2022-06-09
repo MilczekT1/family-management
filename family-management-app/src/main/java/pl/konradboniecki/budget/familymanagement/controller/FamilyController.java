@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.konradboniecki.budget.familymanagement.service.FamilyService;
 import pl.konradboniecki.budget.openapi.api.FamilyManagementApi;
@@ -13,14 +12,10 @@ import pl.konradboniecki.budget.openapi.dto.model.OASFamily;
 import pl.konradboniecki.budget.openapi.dto.model.OASFamilyCreation;
 import pl.konradboniecki.budget.openapi.dto.model.OASFamilyModification;
 
-import static pl.konradboniecki.budget.familymanagement.controller.FamilyController.BASE_PATH;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(BASE_PATH)
 public class FamilyController implements FamilyManagementApi {
-    public static final String BASE_PATH = "/api/family-mgt/v1";
-
     private final FamilyService familyService;
 
     @Override

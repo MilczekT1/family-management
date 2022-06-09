@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.konradboniecki.budget.familymanagement.service.InvitationService;
 import pl.konradboniecki.budget.openapi.api.FamilyInvitationsApi;
@@ -19,14 +18,10 @@ import pl.konradboniecki.budget.openapi.dto.model.OASInvitationPage;
 import java.util.HashMap;
 import java.util.Map;
 
-import static pl.konradboniecki.budget.familymanagement.controller.InvitationController.BASE_PATH;
-
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping(BASE_PATH)
 public class InvitationController implements FamilyInvitationsApi {
-    public static final String BASE_PATH = "/api/family-mgt/v1";
 
     private final InvitationService invitationService;
 

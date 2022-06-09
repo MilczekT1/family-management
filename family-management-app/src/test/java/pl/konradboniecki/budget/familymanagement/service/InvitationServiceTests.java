@@ -34,7 +34,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         webEnvironment = RANDOM_PORT,
         properties = "spring.cloud.config.enabled=false"
 )
-public class InvitationServiceTests {
+class InvitationServiceTests {
 
     @Autowired
     private TestRestTemplate rest;
@@ -49,7 +49,7 @@ public class InvitationServiceTests {
     private Pageable defaultPageable = PageRequest.of(0, 100);
 
     @BeforeAll
-    public void beforeAll() {
+    void beforeAll() {
         baseUrl = "http://localhost:" + port;
         assertThat(rest.getForEntity(baseUrl + "/actuator/health", String.class)
                 .getStatusCodeValue()).isEqualTo(200);
@@ -58,7 +58,7 @@ public class InvitationServiceTests {
     //TODO: rework those tests
 
     @Test
-    public void given_valid_param_when_findAllBy_email_then_return_invitations() {
+    void given_valid_param_when_findAllBy_email_then_return_invitations() {
         // Given:
         String email = "test@mail.com";
         Map<String, String> params = new HashMap<>();
@@ -79,17 +79,17 @@ public class InvitationServiceTests {
         OASInvitationPage retrievedList = invitationService.findAllBy(params, defaultPageable);
         // Then:
         assertThat(retrievedList).isNotNull();
-        assertThat(retrievedList.getItems().size()).isEqualTo(2);
+        assertThat(retrievedList.getItems()).hasSize(2);
         assertThat(retrievedList.getMeta()).isNotNull();
         assertThat(retrievedList.getMeta().getElements()).isEqualTo(2);
         assertThat(retrievedList.getMeta().getTotalElements()).isEqualTo(2);
-        assertThat(retrievedList.getMeta().getPageSize()).isEqualTo(100L);
-        assertThat(retrievedList.getMeta().getPage()).isEqualTo(0);
+        assertThat(retrievedList.getMeta().getPageSize()).isEqualTo(100);
+        assertThat(retrievedList.getMeta().getPage()).isZero();
         assertThat(retrievedList.getMeta().getTotalPages()).isEqualTo(1);
     }
 
     @Test
-    public void given_valid_param_when_findAllBy_familyId_then_return_invitations(){
+    void given_valid_param_when_findAllBy_familyId_then_return_invitations() {
         // Given:
         String familyId = UUID.randomUUID().toString();
         Map<String, String> params = new HashMap<>();
@@ -112,17 +112,17 @@ public class InvitationServiceTests {
         OASInvitationPage retrievedList = invitationService.findAllBy(params, defaultPageable);
         // Then:
         assertThat(retrievedList).isNotNull();
-        assertThat(retrievedList.getItems().size()).isEqualTo(2);
+        assertThat(retrievedList.getItems()).hasSize(2);
         assertThat(retrievedList.getMeta()).isNotNull();
         assertThat(retrievedList.getMeta().getElements()).isEqualTo(2);
         assertThat(retrievedList.getMeta().getTotalElements()).isEqualTo(2);
-        assertThat(retrievedList.getMeta().getPageSize()).isEqualTo(100L);
-        assertThat(retrievedList.getMeta().getPage()).isEqualTo(0);
+        assertThat(retrievedList.getMeta().getPageSize()).isEqualTo(100);
+        assertThat(retrievedList.getMeta().getPage()).isZero();
         assertThat(retrievedList.getMeta().getTotalPages()).isEqualTo(1);
     }
 
     @Test
-    public void given_invalid_param_when_findAllBy_familyId_then_throw(){
+    void given_invalid_param_when_findAllBy_familyId_then_throw() {
         // Given:
         Map<String, String> params = new HashMap<>();
         params.put("invalid_param", UUID.randomUUID().toString());
@@ -130,7 +130,7 @@ public class InvitationServiceTests {
         Throwable throwable = catchThrowableOfType(
                 () -> invitationService.findAllBy(params, defaultPageable), BadRequestException.class);
         // Then:
-        assertThat(throwable).isNotNull();
-        assertThat(throwable).isInstanceOf(BadRequestException.class);
+        assertThat(throwable).isNotNull()
+                .isInstanceOf(BadRequestException.class);
     }
 }

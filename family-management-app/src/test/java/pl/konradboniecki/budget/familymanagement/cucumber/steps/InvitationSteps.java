@@ -10,7 +10,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import pl.konradboniecki.budget.familymanagement.controller.InvitationController;
 import pl.konradboniecki.budget.familymanagement.cucumber.commons.SharedData;
 import pl.konradboniecki.budget.familymanagement.cucumber.security.Security;
 import pl.konradboniecki.budget.openapi.dto.model.OASInvitation;
@@ -29,6 +28,8 @@ public class InvitationSteps {
     private final Security security;
     private final TestRestTemplate testRestTemplate;
     private final SharedData sharedData;
+
+    public final String BASE_PATH = "/api/family-mgt/v1";
 
     @When("I create invitation with following properties:$")
     public void iCreateInvitationWithFollowingProperties(DataTable dataTable) {
@@ -61,7 +62,7 @@ public class InvitationSteps {
     private void createInvitation(OASInvitation invitationToSave) {
         HttpEntity<?> entity = new HttpEntity<>(invitationToSave, security.getSecurityHeaders());
         ResponseEntity<OASInvitation> responseEntity = testRestTemplate
-                .exchange(InvitationController.BASE_PATH + "/invitations", HttpMethod.POST, entity, OASInvitation.class);
+                .exchange(BASE_PATH + "/invitations", HttpMethod.POST, entity, OASInvitation.class);
         sharedData.setLastResponseEntity(responseEntity);
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
@@ -77,7 +78,7 @@ public class InvitationSteps {
     private void deleteInvitation(String invitationId) {
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<OASInvitation> responseEntity = testRestTemplate
-                .exchange(InvitationController.BASE_PATH + "/invitations/{invitationId}", HttpMethod.DELETE, entity, OASInvitation.class, invitationId);
+                .exchange(BASE_PATH + "/invitations/{invitationId}", HttpMethod.DELETE, entity, OASInvitation.class, invitationId);
         sharedData.setLastResponseEntity(responseEntity);
     }
 
@@ -97,14 +98,14 @@ public class InvitationSteps {
     private void getInvitationById(String invitationId) {
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<OASInvitation> responseEntity = testRestTemplate
-                .exchange(InvitationController.BASE_PATH + "/invitations/{invitationId}", HttpMethod.GET, entity, OASInvitation.class, invitationId);
+                .exchange(BASE_PATH + "/invitations/{invitationId}", HttpMethod.GET, entity, OASInvitation.class, invitationId);
         sharedData.setLastResponseEntity(responseEntity);
     }
 
     private void getInvitationsByEmail(String email) {
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<OASInvitationPage> responseEntity = testRestTemplate
-                .exchange(InvitationController.BASE_PATH + "/invitations?email={email}", HttpMethod.GET, entity,
+                .exchange(BASE_PATH + "/invitations?email={email}", HttpMethod.GET, entity,
                         OASInvitationPage.class, email);
         sharedData.setLastResponseEntity(responseEntity);
     }
@@ -112,14 +113,14 @@ public class InvitationSteps {
     private void getInvitationsByEmailAndFamilyId(String email, String familyId) {
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<OASInvitationPage> responseEntity = testRestTemplate
-                .exchange(InvitationController.BASE_PATH + "/invitations?email={email}&familyId={familyId}", HttpMethod.GET, entity, OASInvitationPage.class, email, familyId);
+                .exchange(BASE_PATH + "/invitations?email={email}&familyId={familyId}", HttpMethod.GET, entity, OASInvitationPage.class, email, familyId);
         sharedData.setLastResponseEntity(responseEntity);
     }
 
     private void getInvitationsByFamilyId(String familyId) {
         HttpEntity<?> entity = new HttpEntity<>(null, security.getSecurityHeaders());
         ResponseEntity<OASInvitationPage> responseEntity = testRestTemplate
-                .exchange(InvitationController.BASE_PATH + "/invitations?familyId={familyId}", HttpMethod.GET, entity,
+                .exchange(BASE_PATH + "/invitations?familyId={familyId}", HttpMethod.GET, entity,
                         OASInvitationPage.class, familyId);
         sharedData.setLastResponseEntity(responseEntity);
     }
