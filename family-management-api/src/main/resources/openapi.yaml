@@ -7,8 +7,8 @@ externalDocs:
   description: Go to source Code
   url: https://bitbucket.org/konradboniecki/family-management/src/master/
 servers:
-  - url: http://localhost:8080/api/family-mgt/v1
-  - url: https://konradboniecki.com.pl/api/family-mgt/v1
+  - url: http://localhost:8080
+  - url: https://konradboniecki.com.pl
 tags:
   - name: Family Management
     description: Api for managing families.
