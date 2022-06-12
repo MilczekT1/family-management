@@ -12,7 +12,6 @@ import pl.konradboniecki.budget.openapi.dto.model.*;
 import pl.konradboniecki.chassis.exceptions.BadRequestException;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ public class InvitationService {
     }
 
     public OASCreatedInvitation saveInvitationOrThrow(OASInvitationCreation oasInvitationCreation) {
-        Invitation invitationToSave = invitationMapper.toInvitation(oasInvitationCreation);
+        final var invitationToSave = invitationMapper.toInvitation(oasInvitationCreation);
         invitationToSave.setId(UUID.randomUUID().toString());
         invitationToSave.setCreated(Instant.now());
         return invitationMapper.toOASCreatedInvitation(invitationRepository.save(invitationToSave));
@@ -61,10 +60,10 @@ public class InvitationService {
         } else {
             throw new BadRequestException("Invalid request parameters. Use familyId, email or both");
         }
-        List<OASInvitation> items = invitationPage.get()
+        final var items = invitationPage.get()
                 .map(invitationMapper::toOASInvitation)
                 .collect(Collectors.toList());
-        OASPaginationMetadata paginationMetadata = new OASPaginationMetadata()
+        final var paginationMetadata = new OASPaginationMetadata()
                 .elements(invitationPage.getNumberOfElements())
                 .pageSize(pageable.getPageSize())
                 .page(pageable.getPageNumber())
