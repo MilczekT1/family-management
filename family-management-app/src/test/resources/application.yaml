@@ -11,6 +11,9 @@ spring:
       enabled: false
     zipkin:
       enabled: false
+  mongodb:
+    embedded:
+      version: 4.4.1
 budget:
   chassis:
     http-logging:
