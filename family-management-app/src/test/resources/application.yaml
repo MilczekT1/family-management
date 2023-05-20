@@ -9,11 +9,8 @@ spring:
   cloud:
     config:
       enabled: false
-    zipkin:
-      enabled: false
-  mongodb:
-    embedded:
-      version: 4.4.1
+  main:
+    allow-bean-definition-overriding: true
 budget:
   chassis:
     http-logging:

@@ -1,14 +1,11 @@
 package pl.konradboniecki.budget.familymanagement.service;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,35 +22,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;
 import static org.mockito.Mockito.when;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 @ExtendWith(SpringExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(
         classes = Application.class,
-        webEnvironment = RANDOM_PORT,
+        webEnvironment = NONE,
         properties = "spring.cloud.config.enabled=false"
 )
 class InvitationServiceTests {
 
-    @Autowired
-    private TestRestTemplate rest;
     @MockBean
     private InvitationRepository invitationRepository;
     @Autowired
     private InvitationService invitationService;
-
-    @LocalServerPort
-    private int port;
-    private String baseUrl;
     private Pageable defaultPageable = PageRequest.of(0, 100);
 
-    @BeforeAll
-    void beforeAll() {
-        baseUrl = "http://localhost:" + port;
-        assertThat(rest.getForEntity(baseUrl + "/actuator/health", String.class)
-                .getStatusCodeValue()).isEqualTo(200);
-    }
 
     //TODO: rework those tests
 
