@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import pl.konradboniecki.budget.familymanagement.cucumber.commons.SharedData;
 import pl.konradboniecki.budget.openapi.dto.model.OASInvitationPage;
 
@@ -51,7 +52,7 @@ public class RestSteps {
     }
 
     private void responseStatusCodeEquals(HttpStatus httpStatus) {
-        HttpStatus lastResponseHttpStatus = sharedData.getLastResponseEntity().getStatusCode();
+        HttpStatusCode lastResponseHttpStatus = sharedData.getLastResponseEntity().getStatusCode();
         assertThat(lastResponseHttpStatus).isEqualTo(httpStatus);
     }
 }
