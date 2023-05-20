@@ -8,10 +8,7 @@ import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import pl.konradboniecki.budget.familymanagement.cucumber.commons.SharedData;
 import pl.konradboniecki.budget.familymanagement.cucumber.security.Security;
 import pl.konradboniecki.budget.familymanagement.model.Family;
@@ -214,7 +211,7 @@ public class FamilySteps {
     }
 
     private void responseStatusCodeEquals(HttpStatus httpStatus) {
-        HttpStatus lastResponseHttpStatus = sharedData.getLastResponseEntity().getStatusCode();
+        HttpStatusCode lastResponseHttpStatus = sharedData.getLastResponseEntity().getStatusCode();
         assertThat(lastResponseHttpStatus).isEqualTo(httpStatus);
     }
 }
